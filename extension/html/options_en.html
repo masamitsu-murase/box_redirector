@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <title>Box Redirector Options</title>
+  <link rel="stylesheet" type="text/css" href="../css/options.css" />
+  <script type="text/javascript" src="../js/common.js"></script>
+  <script type="text/javascript" src="../js/options.js"></script>
+</head>
+
+<body>
+  <header>
+    <h1><img src="../images/logo.png" alt="Box Redirector Logo" /> Box Redirector Options</h1>
+  </header>
+
+  <nav>
+    <ul>
+      <li class="selected">General</li>
+      <li>About Box Redirector</li>
+    </ul>
+  </nav>
+
+  <article>
+    <section class="selected">
+      <h1>General</h1>
+
+      <section>
+        <h1>Box URL</h1>
+        <p>Input the Box URL of the root folder. Typically, it should be <code>https://app.box.com/folder/0</code>,
+          but it can be customized for enterprise environments.</p>
+        <p><input id="box_url" type="url" maxlength="500"
+            placeholder="e.g. https://app.box.com/folder/0" /></p>
+        <p>Your access to <code id="generated_box_url_with_param"></code> opens the specified folder/file in Box web app.</p>
+      </section>
+
+      <section>
+        <h1>Box Drive Redirection</h1>
+        <p>You can configure a redirection URL and a parameter name. When the URL is accessed with the parameter which specifies a Box file or folder in your local drive, it will be redirected to the Box URL to open it in Box web app.</p>
+
+        <dl>
+          <dt>URL</dt>
+          <dd><input id="redirection_url" type="url" maxlength="500"
+              placeholder="e.g. http://localhost:5000/box_drive_opener" /></dd>
+          <dt>Parameter Name</dt>
+          <dd><input id="parameter_name" type="text" maxlength="100"
+              placeholder="e.g. path_in_box_drive" /></dd>
+        </dl>
+        <p><code id="generated_redirection_url"></code><br /> will be redirected to <br /><code id="generated_box_url"></code></p>
+      </section>
+
+      <p><input class="save_button" type="button" value="Save" /></p>
+    </section>
+
+    <section>
+      <h1>About Box Redirector</h1>
+
+      <section>
+        <h1>Overview</h1>
+      </section>
+
+      <section>
+        <h1>License</h1>
+      </section>
+
+      <section>
+        <h1>Author</h1>
+        <dl>
+          <dt>Name</dt>
+          <dd>Masamitsu MURASE</dd>
+          <dt>Location</dt>
+          <dd>Kyoto, Japan</dd>
+          <dt>Web</dt>
+          <dd><a href="http://masamitsu-murase.blogspot.com/">Blog (Written in Japanese)</a></dd>
+          <dt>Repository</dt>
+          <dd><a href="https://github.com/masamitsu-murase">GitHub</a></dd>
+          <dt>Contact</dt>
+          <dd>If you find some bugs or have some requests, please let me know on my <a
+              href="https://github.com/masamitsu-murase/box_redirector/issues">GitHub page</a>.
+          </dd>
+        </dl>
+      </section>
+    </section>
+  </article>
+</body>
+
+</html>

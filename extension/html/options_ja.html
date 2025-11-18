@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <title>Box Redirector オプション</title>
+  <link rel="stylesheet" type="text/css" href="../css/options.css" />
+  <script type="text/javascript" src="../js/common.js"></script>
+  <script type="text/javascript" src="../js/options.js"></script>
+</head>
+
+<body>
+  <header>
+    <h1><img src="../images/logo.png" alt="Box Redirector Logo" /> Box Redirector オプション</h1>
+  </header>
+
+  <nav>
+    <ul>
+      <li class="selected">一般</li>
+      <li>Box Redirector について</li>
+    </ul>
+  </nav>
+
+  <article>
+    <section class="selected">
+      <h1>一般</h1>
+
+      <section>
+        <h1>Box URL</h1>
+        <p>ルートフォルダを示す Box URL を入力してください。通常は <code>https://app.box.com/folder/0</code> ですが、エンタープライズ環境に合わせてカスタマイズできます。</p>
+        <p><input id="box_url" type="url" maxlength="500"
+            placeholder="e.g. https://app.box.com/folder/0" /></p>
+        <p>アクセス例: <code id="generated_box_url_with_param"></code> を開くと、指定したフォルダ/ファイルが Box Web アプリで表示されます。</p>
+      </section>
+
+      <section>
+        <h1>Box Drive のリダイレクト</h1>
+        <p>リダイレクト URL とパラメータ名を設定できます。URL がローカル ドライブ内の Box ファイルまたはフォルダーへのパスを指定するパラメータを伴ってアクセスされると、Box URL にリダイレクトされ、Box Web アプリで開かれます。</p>
+
+        <dl>
+          <dt>URL</dt>
+          <dd><input id="redirection_url" type="url" maxlength="500"
+              placeholder="e.g. http://localhost:5000/box_drive_opener" /></dd>
+          <dt>パラメータ名</dt>
+          <dd><input id="parameter_name" type="text" maxlength="100"
+              placeholder="e.g. path_in_box_drive" /></dd>
+        </dl>
+        <p><code id="generated_redirection_url"></code><br />は<br /><code id="generated_box_url"></code>にリダイレクトされます</p>
+      </section>
+
+      <p><input class="save_button" type="button" value="保存" /></p>
+    </section>
+
+    <section>
+      <h1>Box Redirector について</h1>
+
+      <section>
+        <h1>概要</h1>
+      </section>
+
+      <section>
+        <h1>ライセンス</h1>
+      </section>
+
+      <section>
+        <h1>著者</h1>
+        <dl>
+          <dt>名前</dt>
+          <dd>Masamitsu MURASE</dd>
+          <dt>場所</dt>
+          <dd>Kyoto, Japan</dd>
+          <dt>Web</dt>
+          <dd><a href="http://masamitsu-murase.blogspot.com/">Blog</a></dd>
+          <dt>リポジトリ</dt>
+          <dd><a href="https://github.com/masamitsu-murase">GitHub</a></dd>
+          <dt>連絡先</dt>
+          <dd>バグを見つけた場合やリクエストがある場合は、私の<a
+              href="https://github.com/masamitsu-murase/box_redirector/issues">GitHub ページ</a>でお知らせください。
+          </dd>
+        </dl>
+      </section>
+    </section>
+  </article>
+</body>
+
+</html>
