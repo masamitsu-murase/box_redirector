@@ -39,7 +39,9 @@
         <h1>Box Drive Redirection</h1>
         <p>You can configure a redirection URL and a parameter name. When the URL is accessed with the parameter which specifies a Box file or folder in your local drive, it will be redirected to the Box URL to open it in Box web app.</p>
 
-        <dl>
+        <p><input id="use_target_url" type="checkbox" /> Use redirection URL</p>
+
+        <dl id="target_url_settings">
           <dt>URL</dt>
           <dd><input id="redirection_url" type="url" maxlength="500"
               placeholder="e.g. http://localhost:5000/box_drive_opener" /></dd>

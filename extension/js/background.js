@@ -11,6 +11,7 @@ import "./common.js";
             try {
                 if (details.reason === "install") {
                     await browser.storage.local.set({
+                        "settings.use_target_url": false,
                         "settings.target_url": "http://localhost:5000/",
                         "settings.target_param": "path",
                         "settings.box_url": "https://app.box.com/folder/0",

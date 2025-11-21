@@ -33,14 +33,17 @@ if (typeof browser === "undefined") globalThis.browser = chrome;
         return result[key] !== undefined ? result[key] : defaultValue;
     };
 
-    var setDynamicRules = async function (targetUrl, targetParam, boxUrl, boxParam) {
+    var setDynamicRules = async function (useTargetUrl, targetUrl, targetParam, boxUrl, boxParam) {
         const invalidUrlChars = ['*', '|', '^'];  // Special for urlFilter
         const paramPattern = /^[-_a-z0-9]+$/i;
-        if (invalidUrlChars.some(char => targetUrl.includes(char))) {
-            throw new Error(`Invalid targetUrl: ${targetUrl}`);
-        }
-        if (!paramPattern.test(targetParam)) {
-            throw new Error(`Invalid targetParam: ${targetParam}`);
+
+        if (useTargetUrl) {
+            if (invalidUrlChars.some(char => targetUrl.includes(char))) {
+                throw new Error(`Invalid targetUrl: ${targetUrl}`);
+            }
+            if (!paramPattern.test(targetParam)) {
+                throw new Error(`Invalid targetParam: ${targetParam}`);
+            }
         }
         if (invalidUrlChars.some(char => boxUrl.includes(char))) {
             throw new Error(`Invalid boxUrl: ${boxUrl}`);
@@ -48,14 +51,6 @@ if (typeof browser === "undefined") globalThis.browser = chrome;
         if (!paramPattern.test(boxParam)) {
             throw new Error(`Invalid boxParam: ${boxParam}`);
         }
-
-        var url = new URL(targetUrl);
-        const urlFilter1 = `|${url.protocol}//${url.hostname}*?${targetParam}=`;
-        const urlFilter2 = `|${url.protocol}//${url.hostname}*?*&${targetParam}=`;
-
-        var box = new URL(boxUrl);
-        const urlFilter3 = `|${box.protocol}//${box.hostname}*?${boxParam}=`;
-        const urlFilter4 = `|${box.protocol}//${box.hostname}*?*&${boxParam}=`;
 
         const REDIRECTOR_URL = new URL(browser.runtime.getURL("html/redirector.html"));
         const transform = {
@@ -67,31 +62,44 @@ if (typeof browser === "undefined") globalThis.browser = chrome;
             path: REDIRECTOR_URL.pathname,
             // Keep query values.
         };
-        const rules = [
-            {
-                id: 1,
-                priority: 1,
-                condition: {
-                    urlFilter: urlFilter1,
-                    resourceTypes: ["main_frame"],
+
+        let rules = [];
+        if (useTargetUrl) {
+            var url = new URL(targetUrl);
+            const urlFilter1 = `|${url.protocol}//${url.hostname}*?${targetParam}=`;
+            const urlFilter2 = `|${url.protocol}//${url.hostname}*?*&${targetParam}=`;
+            rules = rules.concat([
+                {
+                    id: 1,
+                    priority: 1,
+                    condition: {
+                        urlFilter: urlFilter1,
+                        resourceTypes: ["main_frame"],
+                    },
+                    action: {
+                        type: "redirect",
+                        redirect: { transform: transform }
+                    }
                 },
-                action: {
-                    type: "redirect",
-                    redirect: { transform: transform }
-                }
-            },
-            {
-                id: 2,
-                priority: 2,
-                condition: {
-                    urlFilter: urlFilter2,
-                    resourceTypes: ["main_frame"],
+                {
+                    id: 2,
+                    priority: 2,
+                    condition: {
+                        urlFilter: urlFilter2,
+                        resourceTypes: ["main_frame"],
+                    },
+                    action: {
+                        type: "redirect",
+                        redirect: { transform: transform }
+                    }
                 },
-                action: {
-                    type: "redirect",
-                    redirect: { transform: transform }
-                }
-            },
+            ]);
+        }
+
+        var box = new URL(boxUrl);
+        const urlFilter3 = `|${box.protocol}//${box.hostname}*?${boxParam}=`;
+        const urlFilter4 = `|${box.protocol}//${box.hostname}*?*&${boxParam}=`;
+        rules = rules.concat([
             {
                 id: 3,
                 priority: 100,
@@ -104,7 +112,7 @@ if (typeof browser === "undefined") globalThis.browser = chrome;
                 condition: { urlFilter: urlFilter4, },
                 action: { type: "allow", }
             },
-        ];
+        ]);
         console.info(rules);
 
         const currentRules = await browser.declarativeNetRequest.getDynamicRules();
@@ -116,11 +124,13 @@ if (typeof browser === "undefined") globalThis.browser = chrome;
     };
 
     var setBoxRedirectorRules = async function() {
+        const useTargetUrl = await ctx.getStorageData("settings.use_target_url");
         const targetUrl = await ctx.getStorageData("settings.target_url");
         const targetParam = await ctx.getStorageData("settings.target_param");
         const boxUrl = await ctx.getStorageData("settings.box_url");
         const boxParam = ctx.PATH_PARAMETER_NAME;
         await setDynamicRules(
+            useTargetUrl,
             targetUrl,
             targetParam,
             boxUrl,

@@ -66,16 +66,26 @@ if (typeof browser === "undefined") globalThis.browser = chrome;
         const saveButtons = Array.from(document.getElementsByClassName('save_button'));
         saveButtons.forEach(function(button) {
             button.addEventListener('click', function() {
-                const redirectionUrl = new URL(document.getElementById('redirection_url').value.trim());
-                const urlForPermission = redirectionUrl.protocol + '//' + redirectionUrl.hostname + redirectionUrl.pathname + '*';
-                const parameterName = document.getElementById('parameter_name').value.trim();
-                const boxUrl = new URL(document.getElementById('box_url').value.trim());
+                const boxUrlRaw = document.getElementById('box_url').value.trim();
+                const useTargetUrl = document.getElementById('use_target_url').checked;
+                const redirectionUrlRaw = document.getElementById('redirection_url').value.trim();
+                let urlsForPermission = [];
+
                 try {
+                    const boxUrl = new URL(boxUrlRaw);
                     if (boxUrl.protocol !== 'https:') {
                         throw new Error('Box URL must use https scheme.');
                     }
                     if (!boxUrl.hostname.endsWith(ctx.BOX_DOMAIN_SUFFIX)) {
                         throw new Error(`Box URL must be a ${ctx.BOX_DOMAIN_SUFFIX} domain.`);
+                    }
+
+                    if (useTargetUrl) {
+                        const redirectionUrl = new URL(redirectionUrlRaw);
+                        if (!(["http:", "https:"].includes(redirectionUrl.protocol))) {
+                            throw new Error('Redirection URL must use http or https scheme.');
+                        }
+                        urlsForPermission.push(redirectionUrl.protocol + '//' + redirectionUrl.hostname + redirectionUrl.pathname + '*');
                     }
                 } catch (e) {
                     console.error(e);
@@ -83,14 +93,23 @@ if (typeof browser === "undefined") globalThis.browser = chrome;
                     return;
                 }
 
-                browser.permissions.request({ origins: [urlForPermission] }).then(function(granted) {
+                let promise;
+                if (urlsForPermission.length === 0) {
+                    promise = Promise.resolve(true);
+                } else {
+                    promise = browser.permissions.request({ origins: urlsForPermission });
+                }
+
+                const parameterName = document.getElementById('parameter_name').value.trim();
+                promise.then(function(granted) {
                     if (!granted) {
-                        throw new Error(`Permission request for ${redirectionUrl} was denied.`);
+                        throw new Error(`Permission request was denied.`);
                     }
                     return browser.storage.local.set({
-                        "settings.target_url": redirectionUrl.toString(),
+                        "settings.use_target_url": useTargetUrl,
+                        "settings.target_url": redirectionUrlRaw,
                         "settings.target_param": parameterName,
-                        "settings.box_url": boxUrl.toString(),
+                        "settings.box_url": boxUrlRaw,
                     });
                 }).then(function() {
                     return ctx.setBoxRedirectorRules();
