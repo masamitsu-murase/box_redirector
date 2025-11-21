@@ -34,4 +34,8 @@ import "./common.js";
             }
         })();
     });
+
+    browser.action.onClicked.addListener(function(tab) {
+        browser.runtime.openOptionsPage();
+    });
 })(BoxRedirector);
