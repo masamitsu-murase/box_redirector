@@ -39,17 +39,19 @@
         <h1>Box Drive Redirection</h1>
         <p>You can configure a redirection URL and a parameter name. When the URL is accessed with the parameter which specifies a Box file or folder in your local drive, it will be redirected to the Box URL to open it in Box web app.</p>
 
-        <p><input id="use_target_url" type="checkbox" /> Use redirection URL</p>
+        <p><input id="use_target_url" type="checkbox" /> <label for="use_target_url">Use redirection URL</label></p>
 
-        <dl id="target_url_settings">
-          <dt>URL</dt>
-          <dd><input id="redirection_url" type="url" maxlength="500"
-              placeholder="e.g. http://localhost:5000/box_drive_opener" /></dd>
-          <dt>Parameter Name</dt>
-          <dd><input id="parameter_name" type="text" maxlength="100"
-              placeholder="e.g. path_in_box_drive" /></dd>
-        </dl>
-        <p><code id="generated_redirection_url"></code><br /> will be redirected to <br /><code id="generated_box_url"></code></p>
+        <div id="target_url_settings">
+          <dl>
+            <dt>URL</dt>
+            <dd><input id="redirection_url" type="url" maxlength="500"
+                placeholder="e.g. http://localhost:5000/box_drive_opener" /></dd>
+            <dt>Parameter Name</dt>
+            <dd><input id="parameter_name" type="text" maxlength="100"
+                placeholder="e.g. path_in_box_drive" /></dd>
+          </dl>
+          <p><code id="generated_redirection_url"></code><br /> will be redirected to <br /><code id="generated_box_url"></code></p>
+        </div>
       </section>
 
       <p><input class="save_button" type="button" value="Save" /></p>

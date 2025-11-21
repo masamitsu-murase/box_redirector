@@ -63,6 +63,23 @@ if (typeof browser === "undefined") globalThis.browser = chrome;
             });
         });
 
+        // Toggle target_url_settings visibility based on checkbox
+        var useTargetUrlCheckbox = document.getElementById('use_target_url');
+        var targetUrlSettingsDiv = document.getElementById('target_url_settings');
+        if (useTargetUrlCheckbox && targetUrlSettingsDiv) {
+            var toggleTargetUrlSettings = function() {
+                if (useTargetUrlCheckbox.checked) {
+                    targetUrlSettingsDiv.classList.remove('hidden');
+                } else {
+                    targetUrlSettingsDiv.classList.add('hidden');
+                }
+            };
+            useTargetUrlCheckbox.addEventListener('change', toggleTargetUrlSettings);
+            // Initial state
+            toggleTargetUrlSettings();
+        }
+
+        // Save buttons
         const saveButtons = Array.from(document.getElementsByClassName('save_button'));
         saveButtons.forEach(function(button) {
             button.addEventListener('click', function() {

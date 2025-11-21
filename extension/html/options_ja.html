@@ -38,17 +38,19 @@
         <h1>Box Drive のリダイレクト</h1>
         <p>リダイレクト URL とパラメータ名を設定できます。URL がローカル ドライブ内の Box ファイルまたはフォルダーへのパスを指定するパラメータを伴ってアクセスされると、Box URL にリダイレクトされ、Box Web アプリで開かれます。</p>
 
-        <p><input id="use_target_url" type="checkbox" /> リダイレクト URL を使用する</p>
+        <p><input id="use_target_url" type="checkbox" /> <label for="use_target_url">リダイレクト URL を使用する</label></p>
 
-        <dl id="target_url_settings">
-          <dt>URL</dt>
-          <dd><input id="redirection_url" type="url" maxlength="500"
-              placeholder="e.g. http://localhost:5000/box_drive_opener" /></dd>
-          <dt>パラメータ名</dt>
-          <dd><input id="parameter_name" type="text" maxlength="100"
-              placeholder="e.g. path_in_box_drive" /></dd>
-        </dl>
-        <p><code id="generated_redirection_url"></code><br />は<br /><code id="generated_box_url"></code>にリダイレクトされます</p>
+        <div id="target_url_settings">
+          <dl>
+            <dt>URL</dt>
+            <dd><input id="redirection_url" type="url" maxlength="500"
+                placeholder="e.g. http://localhost:5000/box_drive_opener" /></dd>
+            <dt>パラメータ名</dt>
+            <dd><input id="parameter_name" type="text" maxlength="100"
+                placeholder="e.g. path_in_box_drive" /></dd>
+          </dl>
+          <p><code id="generated_redirection_url"></code><br />は<br /><code id="generated_box_url"></code>にリダイレクトされます</p>
+        </div>
       </section>
 
       <p><input class="save_button" type="button" value="保存" /></p>
