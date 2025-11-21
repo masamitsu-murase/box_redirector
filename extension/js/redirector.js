@@ -26,7 +26,8 @@ if (typeof browser === "undefined") globalThis.browser = chrome;
 
                 const boxPath = convertFullPathToBoxPath(pathParam);
 
-                let newUrl = new URL("http://app.box.com/folder/0");
+                const newUrlBase = await ctx.getStorageData("settings.box_url");
+                let newUrl = new URL(newUrlBase);
                 newUrl.searchParams.set(ctx.PATH_PARAMETER_NAME, boxPath);
                 window.location.href = newUrl.href;
             } catch (e) {

@@ -43,7 +43,7 @@ if (typeof browser === "undefined") globalThis.browser = chrome;
 
     try {
         const boxPathInfo = await findBoxPathInfo(boxPath);
-        window.location.href = `https://app.box.com/${boxPathInfo.type}/${boxPathInfo.id}`;
+        window.location.href = `/${boxPathInfo.type}/${boxPathInfo.id}`;
     } catch (e) {
         console.error(e);
     }
