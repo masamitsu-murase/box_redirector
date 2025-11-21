@@ -10,6 +10,8 @@ When you access a URL such as:
 
 Box Redirector automatically redirects you to the corresponding page for `somefolder/sample.txt` inside Box, allowing you to open files or folders in the Box web app directly from your local Box Drive path.
 
+**Note:** This extension uses undocumented Box APIs. It may stop working if Box changes their service or API specifications.
+
 ## License
 
 See [LICENSE.txt](./LICENSE.txt).
