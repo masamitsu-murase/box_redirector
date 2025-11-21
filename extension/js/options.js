@@ -81,6 +81,22 @@ if (typeof browser === "undefined") globalThis.browser = chrome;
 
         // Save buttons
         const saveButtons = Array.from(document.getElementsByClassName('save_button'));
+        const inputIds = ['box_url', 'redirection_url', 'parameter_name', 'use_target_url'];
+        inputIds.forEach(function(id) {
+            let el = document.getElementById(id);
+            if (el) {
+                if (el.type === 'checkbox') {
+                    el.addEventListener('change', function() {
+                        saveButtons.forEach(function(btn) { btn.classList.add('unsaved'); });
+                    });
+                } else {
+                    el.addEventListener('input', function() {
+                        saveButtons.forEach(function(btn) { btn.classList.add('unsaved'); });
+                    });
+                }
+            }
+        });
+
         saveButtons.forEach(function(button) {
             button.addEventListener('click', function() {
                 const boxUrlRaw = document.getElementById('box_url').value.trim();
@@ -130,6 +146,8 @@ if (typeof browser === "undefined") globalThis.browser = chrome;
                     });
                 }).then(function() {
                     return ctx.setBoxRedirectorRules();
+                }).then(function() {
+                    saveButtons.forEach(function(btn) { btn.classList.remove('unsaved'); });
                 }).catch(function(error) {
                     console.error(error);
                     alert(error.message);

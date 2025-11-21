@@ -181,6 +181,17 @@ code {
   transform: translateY(-1px);
 }
 
+.save_button.unsaved {
+  background: #e67c30;
+  color: #fff;
+  box-shadow: 0 6px 14px rgba(230,124,48,0.12);
+  transition: background 120ms, box-shadow 120ms;
+}
+
+.save_button.unsaved:hover {
+  background: #c95e13;
+}
+
 a { color: var(--primary); }
 
 /* Checkbox and label styling for options_en.html */
