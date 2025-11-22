@@ -52,7 +52,8 @@ if (typeof browser === "undefined") globalThis.browser = chrome;
             throw new Error(`Invalid boxParam: ${boxParam}`);
         }
 
-        const REDIRECTOR_URL = new URL(browser.runtime.getURL("html/redirector.html"));
+        const REDIRECTOR_PAGE = "html/" + browser.i18n.getMessage("redirector_page");
+        const REDIRECTOR_URL = new URL(browser.runtime.getURL(REDIRECTOR_PAGE));
         const transform = {
             scheme: REDIRECTOR_URL.protocol.replace(":", ""),
             host: REDIRECTOR_URL.hostname,

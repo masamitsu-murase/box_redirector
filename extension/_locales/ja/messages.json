@@ -1,5 +1,8 @@
 {
-    "option_page": {
+    "options_page": {
         "message": "options_ja.html"
+    },
+    "redirector_page": {
+        "message": "redirector_ja.html"
     }
 }

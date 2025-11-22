@@ -52,7 +52,8 @@
     "web_accessible_resources": [
         {
             "resources": [
-                "html/redirector.html"
+                "html/redirector_en.html",
+                "html/redirector_ja.html"
             ],
             "matches": [
                 "*://*/*"

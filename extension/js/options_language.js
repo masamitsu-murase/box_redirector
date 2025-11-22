@@ -4,5 +4,5 @@ if (typeof browser === "undefined") globalThis.browser = chrome;
 (function() {
     "use strict";
 
-    location.href = browser.i18n.getMessage("option_page");
+    location.href = browser.i18n.getMessage("options_page");
 })();
