@@ -16,6 +16,16 @@
         ],
         "type": "module"
     },
+    "browser_specific_settings": {
+        "gecko": {
+            "id": "@box_redirector.masamitsu.murase",
+            "data_collection_permissions": {
+                "required": ["none"]
+            },
+            "strict_min_version": "128.0"
+        },
+        "gecko_android": {}
+    },
     "content_scripts": [
         {
             "matches": ["https://*.box.com/*"],
