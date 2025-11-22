@@ -1,0 +1,15 @@
+diff --git a/extension/manifest.json b/extension/manifest.json
+index 56cf34b..2c39780 100644
+--- a/extension/manifest.json
++++ b/extension/manifest.json
+@@ -11,9 +11,7 @@
+     },
+     "default_locale": "en",
+     "background": {
+-        "scripts": [
+-            "js/background.js"
+-        ],
++        "service_worker": "js/background.js",
+         "type": "module"
+     },
+     "browser_specific_settings": {
