@@ -15,16 +15,13 @@ jobs:
     - uses: actions/checkout@v6
 
     - uses: actions/setup-python@v6
+      with:
+        python-version: '3.13'
 
     - run: python tools/generate_packages.py
       shell: cmd
 
     - uses: actions/upload-artifact@v4
       with:
-        name: firefox
-        path: dist/firefox.zip
-
-    - uses: actions/upload-artifact@v4
-      with:
-        name: chrome
-        path: dist/chrome.zip
+        name: extension
+        path: dist/*.zip
