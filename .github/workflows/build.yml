@@ -1,0 +1,30 @@
+name: Build
+
+on:
+  push:
+    branches: [ main ]
+    tags: ['v*']
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  generate_zip:
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v6
+
+    - uses: actions/setup-python@v6
+
+    - run: python tools/generate_packages.py
+      shell: cmd
+
+    - uses: actions/upload-artifact@v4
+      with:
+        name: firefox
+        path: dist/firefox.zip
+
+    - uses: actions/upload-artifact@v4
+      with:
+        name: chrome
+        path: dist/chrome.zip
