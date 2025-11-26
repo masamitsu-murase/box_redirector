@@ -2,7 +2,7 @@ name: Build
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, macos ]
     tags: ['v*']
   pull_request:
     branches: [ main ]
@@ -25,3 +25,14 @@ jobs:
       with:
         name: extension
         path: dist/*.zip
+
+  macos:
+    runs-on: macos-latest
+
+    steps:
+    - uses: actions/checkout@v6
+    - uses: actions/setup-python@v6
+      with:
+        python-version: '3.13'
+    - run: python tools/generate_packages.py
+    - run: xcrun safari-web-extension-converter extension
