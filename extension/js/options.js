@@ -28,23 +28,6 @@ if (typeof browser === "undefined") globalThis.browser = chrome;
     }
 
     document.addEventListener("DOMContentLoaded", function(event) {
-        ['box_url', 'redirection_url', 'parameter_name'].forEach(function(id) {
-            var el = document.getElementById(id);
-            if (el) {
-                el.addEventListener('input', updateGeneratedUrls);
-            }
-        });
-
-        (async function() {
-            const redirectionUrl = await ctx.getStorageData("settings.target_url");
-            document.getElementById('redirection_url').value = redirectionUrl;
-            const parameterName = await ctx.getStorageData("settings.target_param");
-            document.getElementById('parameter_name').value = parameterName;
-            const boxUrl = await ctx.getStorageData("settings.box_url");
-            document.getElementById('box_url').value = boxUrl;
-            updateGeneratedUrls();
-        })();
-
         // Add nav click handler for switching selected page
         var navItems = document.querySelectorAll('nav ul li');
         var articleSections = document.querySelectorAll('article > section');
@@ -66,18 +49,34 @@ if (typeof browser === "undefined") globalThis.browser = chrome;
         // Toggle target_url_settings visibility based on checkbox
         var useTargetUrlCheckbox = document.getElementById('use_target_url');
         var targetUrlSettingsDiv = document.getElementById('target_url_settings');
-        if (useTargetUrlCheckbox && targetUrlSettingsDiv) {
-            var toggleTargetUrlSettings = function() {
-                if (useTargetUrlCheckbox.checked) {
-                    targetUrlSettingsDiv.classList.remove('hidden');
-                } else {
-                    targetUrlSettingsDiv.classList.add('hidden');
-                }
-            };
-            useTargetUrlCheckbox.addEventListener('change', toggleTargetUrlSettings);
+        var toggleTargetUrlSettings = function() {
+            if (useTargetUrlCheckbox.checked) {
+                targetUrlSettingsDiv.classList.remove('hidden');
+            } else {
+                targetUrlSettingsDiv.classList.add('hidden');
+            }
+        };
+        useTargetUrlCheckbox.addEventListener('change', toggleTargetUrlSettings);
+
+        ['box_url', 'redirection_url', 'parameter_name'].forEach(function(id) {
+            var el = document.getElementById(id);
+            if (el) {
+                el.addEventListener('input', updateGeneratedUrls);
+            }
+        });
+
+        (async function() {
+            const redirectionUrl = await ctx.getStorageData("settings.target_url");
+            document.getElementById('redirection_url').value = redirectionUrl;
+            const parameterName = await ctx.getStorageData("settings.target_param");
+            document.getElementById('parameter_name').value = parameterName;
+            const boxUrl = await ctx.getStorageData("settings.box_url");
+            document.getElementById('box_url').value = boxUrl;
+            useTargetUrlCheckbox.checked = await ctx.getStorageData("settings.use_target_url");
             // Initial state
+            updateGeneratedUrls();
             toggleTargetUrlSettings();
-        }
+        })();
 
         // Save buttons
         const saveButtons = Array.from(document.getElementsByClassName('save_button'));
