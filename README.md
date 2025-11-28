@@ -4,6 +4,8 @@
 
 Box Redirector is a browser extension that enables seamless integration between Box Drive and the Box web application.
 
+https://github.com/user-attachments/assets/60018678-9c02-4646-b7d0-481dbac62ec1
+
 ## Details
 
 ### Redirection of a path in Box web application
