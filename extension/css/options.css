@@ -283,6 +283,9 @@ label[for="use_target_url"] {
     font-size: 1.35rem;
     margin-bottom: 1rem;
   }
+  article > section > h1 {
+    color: transparent;
+  }
   article > section > section {
     padding: 1rem 0.7rem;
     margin-bottom: 1rem;
@@ -330,6 +333,7 @@ label[for="use_target_url"] {
     width: 100%;
     height: auto;
     font-size: 1.05rem;
+    box-shadow: 0 2px 8px rgba(38,100,160,0.10); /* add shadow */
   }
   nav ul {
     flex-direction: column;
