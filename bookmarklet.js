@@ -1,4 +1,4 @@
-(async function() {
+(function() {
     "use strict";
 
     // https://app.box.com/app-api/enduserapp/folder/350222452533?format=minimal
@@ -124,23 +124,48 @@
         throw new Error("The specified path is not a Box folder path.");
     };
 
-    try {
-        const href = new URL(window.location.href);
-        if (!href.hostname.endsWith(".box.com")) {
-            throw new Error("This script should be run on box.com domain.");
-        }
-
-        const url = new URL(prompt("Enter the URL to process:", ""));
+    var findBoxPath = function(urlText) {
+        const url = new URL(urlText);
         const originalPath = url.searchParams.get("path");
         const boxPath = convertFullPathToBoxPath(originalPath);
-        if (!boxPath) {
-            alert("No path parameter found in the URL.");
-        }
+        return boxPath;
+    };
 
-        const boxPathInfo = await findBoxPathInfo(boxPath);
-        window.location.href = "/" + encodeURIComponent(boxPathInfo.type) + "/" + encodeURIComponent(boxPathInfo.id);
-    } catch (e) {
-        console.error(e);
-        alert(e.message);
+    var main = async function(urlText) {
+        try {
+            const href = new URL(window.location.href);
+            if (!href.hostname.endsWith(".box.com")) {
+                throw new Error("This script should be run on box.com domain.");
+            }
+
+            let boxPath = null;
+            if (urlText) {
+                try {
+                    boxPath = findBoxPath(urlText);
+                } catch (e) {
+                }
+            }
+
+            if (!boxPath) {
+                urlText = prompt("Enter the URL to process:", "");
+                boxPath = findBoxPath(urlText);
+            }
+
+            const boxPathInfo = await findBoxPathInfo(boxPath);
+            window.location.href = "/" + encodeURIComponent(boxPathInfo.type) + "/" + encodeURIComponent(boxPathInfo.id);
+        } catch (e) {
+            console.error(e);
+            alert(e.message);
+        }
+    };
+
+    if (navigator.clipboard && navigator.clipboard.readText) {
+        navigator.clipboard.readText().then(function(text) {
+            main(text);
+        }).catch(function() {
+            main(null);
+        });
+    } else {
+        main(null);
     }
 })();
