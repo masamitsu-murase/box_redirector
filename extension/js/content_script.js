@@ -4,12 +4,30 @@ if (typeof browser === "undefined") globalThis.browser = chrome;
 (async function(ctx) {
     "use strict";
 
+    // https://app.box.com/app-api/enduserapp/folder/350222452533?format=minimal
+    // https://app.box.com/app-api/enduserapp/folder/0?format=minimal&itemOffset=65&pageSize=21&paginationMode=offset
+    // https://app.box.com/app-api/enduserapp/folder/352871851123?format=minimal&marker=eyJ0eXBlIjoiZm...=&pageSize=20&paginationMode=marker
+    const API_BASE = "/app-api/enduserapp";
+
     console.log("Box Redirector content script loaded.");
 
+    var getNextUrl = function(itemInfo, paginationMode, offset, perPage) {
+        let url = new URL(`${API_BASE}/folder/${itemInfo.folder.id}`, "http://example.com");
+        url.searchParams.append('format', 'minimal');
+        url.searchParams.append('pageSize', perPage);
+        if (paginationMode === 'marker') {
+            url.searchParams.append('marker', itemInfo.nextMarker);
+            url.searchParams.append('paginationMode', 'marker');
+        } else if (paginationMode === 'offset') {
+            url.searchParams.append('itemOffset', offset);
+            url.searchParams.append('paginationMode', 'offset');
+        } else {
+            throw new Error("Unknown pagination mode.");
+        }
+        return url.pathname + url.search;
+    };
+
     var findItemInFolder = async function(targetItemName, folderId) {
-        // https://app.box.com/app-api/enduserapp/folder/350222452533?format=minimal
-        // https://app.box.com/app-api/enduserapp/folder/0?format=minimal&itemOffset=65&pageSize=21&paginationMode=offset
-        const API_BASE = "/app-api/enduserapp";
         const PER_PAGE = 20;
 
         folderId = encodeURIComponent(folderId);
@@ -31,28 +49,29 @@ if (typeof browser === "undefined") globalThis.browser = chrome;
         const folderItemCount = itemInfo.folderItemCount;
         if (folderItemCount > itemInfo.items.length) {
             let offset = itemInfo.items.length;
+            const paginationMode = (itemInfo.nextMarker ? 'marker' : 'offset');
             while (offset < folderItemCount) {
-                let url = new URL(`${API_BASE}/folder/${folderId}`, "http://example.com");
-                url.searchParams.append('format', 'minimal');
-                url.searchParams.append('itemOffset', offset);
-                url.searchParams.append('pageSize', PER_PAGE);
-                url.searchParams.append('paginationMode', 'offset');
-                const moreItemsResponse = await fetch(url.pathname + url.search);
-                if (!moreItemsResponse.ok) {
+                const nextUrl = getNextUrl(itemInfo, paginationMode, offset, PER_PAGE);
+                const itemInfoResponse = await fetch(nextUrl);
+                if (!itemInfoResponse.ok) {
                     throw new Error(`Failed to fetch more items for folder ID ${folderId}.`);
                 }
 
-                itemInfo = await moreItemsResponse.json();
-                if (itemInfo.folder && itemInfo.folder.type !== 'folder') {
-                    throw new Error(`Item with ID ${folderId} is not a folder.`);
-                }
-
+                itemInfo = await itemInfoResponse.json();
                 targetItem = itemInfo.items.find(entry => entry.name === targetItemName);
                 if (targetItem) {
                     return targetItem;
                 }
-                if (itemInfo.items.length < PER_PAGE) {
-                    break;
+                if (paginationMode === 'marker') {
+                    if (!itemInfo.nextMarker) {
+                        break;
+                    }
+                } else if (paginationMode === 'offset') {
+                    if (itemInfo.items.length < PER_PAGE) {
+                        break;
+                    }
+                } else {
+                    throw new Error("Unknown pagination mode.");
                 }
                 offset += itemInfo.items.length;
             }
