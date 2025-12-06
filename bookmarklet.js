@@ -159,13 +159,14 @@
         }
     };
 
-    if (navigator.clipboard && navigator.clipboard.readText) {
-        navigator.clipboard.readText().then(function(text) {
-            main(text);
-        }).catch(function() {
-            main(null);
-        });
-    } else {
-        main(null);
-    }
+    // if (navigator.clipboard && navigator.clipboard.readText) {
+    //     navigator.clipboard.readText().then(function(text) {
+    //         main(text);
+    //     }).catch(function() {
+    //         main(null);
+    //     });
+    // } else {
+    //     main(null);
+    // }
+    main(null);
 })();
